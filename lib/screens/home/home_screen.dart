@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import '../../providers/guardian_provider.dart';
 import '../../routes/app_routes.dart';
 import '../../core/constants/app_constants.dart';
+import '../../widgets/responsive_widgets.dart';
+import '../../widgets/responsive_scaffold.dart';
+import '../../core/utils/responsive_utils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,13 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(AppConstants.appName),
-        elevation: 0,
-        backgroundColor: Theme.of(context).primaryColor,
-        foregroundColor: Colors.white,
-      ),
+    return ResponsiveScaffold(
+      title: AppConstants.appName,
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -65,7 +63,7 @@ class DashboardTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: ResponsiveHelper.getScreenPadding(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -78,7 +76,7 @@ class DashboardTab extends StatelessWidget {
             builder: (context, guardianProvider, child) {
               return Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: ResponsiveHelper.getScreenPadding(context),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -87,26 +85,44 @@ class DashboardTab extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      ResponsiveGrid(
+                        childAspectRatio: 1.0,
                         children: [
-                          _StatCard(
+                          ResponsiveStatsCard(
                             title: 'Guardians',
                             value: '${guardianProvider.guardiansCount}',
                             icon: Icons.people,
                             color: Colors.blue,
+                            onTap: () {
+                              // Navigate to guardians
+                            },
                           ),
-                          _StatCard(
+                          ResponsiveStatsCard(
                             title: 'Sessions',
                             value: '0',
                             icon: Icons.school,
                             color: Colors.green,
+                            onTap: () {
+                              // Navigate to sessions
+                            },
                           ),
-                          _StatCard(
+                          ResponsiveStatsCard(
                             title: 'Payments',
                             value: '0',
                             icon: Icons.payment,
                             color: Colors.orange,
+                            onTap: () {
+                              // Navigate to payments
+                            },
+                          ),
+                          ResponsiveStatsCard(
+                            title: 'Reports',
+                            value: '0',
+                            icon: Icons.analytics,
+                            color: Colors.purple,
+                            onTap: () {
+                              // Navigate to reports
+                            },
                           ),
                         ],
                       ),
@@ -130,44 +146,6 @@ class DashboardTab extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final IconData icon;
-  final Color color;
-
-  const _StatCard({
-    required this.title,
-    required this.value,
-    required this.icon,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(icon, size: 32, color: color),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          value,
-          style: Theme.of(
-            context,
-          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-        ),
-        Text(title, style: Theme.of(context).textTheme.bodySmall),
-      ],
     );
   }
 }
@@ -336,40 +314,36 @@ class SettingsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: ResponsiveHelper.getScreenPadding(context),
       children: [
-        Card(
-          child: ListTile(
-            leading: const Icon(Icons.palette),
-            title: const Text('Theme'),
-            subtitle: const Text('Customize app appearance'),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              // Navigate to theme settings
-            },
-          ),
+        ResponsiveListTile(
+          title: 'Theme',
+          subtitle: 'Customize app appearance',
+          leading: const Icon(Icons.palette),
+          trailing: const Icon(Icons.arrow_forward_ios),
+          onTap: () {
+            // Navigate to theme settings
+          },
         ),
-        Card(
-          child: ListTile(
-            leading: const Icon(Icons.backup),
-            title: const Text('Backup & Restore'),
-            subtitle: const Text('Manage your data'),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              // Navigate to backup settings
-            },
-          ),
+        const SizedBox(height: 8),
+        ResponsiveListTile(
+          title: 'Backup & Restore',
+          subtitle: 'Manage your data',
+          leading: const Icon(Icons.backup),
+          trailing: const Icon(Icons.arrow_forward_ios),
+          onTap: () {
+            // Navigate to backup settings
+          },
         ),
-        Card(
-          child: ListTile(
-            leading: const Icon(Icons.info),
-            title: const Text('About'),
-            subtitle: Text('Version ${AppConstants.appVersion}'),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              // Show about dialog
-            },
-          ),
+        const SizedBox(height: 8),
+        ResponsiveListTile(
+          title: 'About',
+          subtitle: 'Version ${AppConstants.appVersion}',
+          leading: const Icon(Icons.info),
+          trailing: const Icon(Icons.arrow_forward_ios),
+          onTap: () {
+            // Show about dialog
+          },
         ),
       ],
     );

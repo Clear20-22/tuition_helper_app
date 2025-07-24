@@ -160,7 +160,35 @@ Navigation layer managing app routing and navigation flow.
 - Navigation error handling
 - Deep linking support
 
-### 📱 Screens (`screens/`)
+### 📱 Responsive Design
+
+The app is designed to provide an optimal user experience across all device sizes:
+
+### 🎯 Responsive Features
+
+- **Adaptive Layout**: Different layouts for mobile (< 600px), tablet (600-1024px), and desktop (> 1024px)
+- **Responsive Grid**: Dashboard statistics adapt from 2 columns on mobile to 4 columns on desktop
+- **Dynamic Padding**: Screen padding adjusts based on device size for optimal content spacing
+- **Scalable Components**: All UI components automatically scale with screen size
+- **Adaptive Navigation**: Enhanced navigation bar on larger screens with bigger icons and text
+- **Font Scaling**: Supports system font scaling preferences via MediaQuery
+
+### 📏 Breakpoints
+
+```dart
+- Mobile: < 600px width
+- Tablet: 600px - 1024px width  
+- Desktop: > 1024px width
+```
+
+### 🛠 Responsive Components
+
+- `ResponsiveBuilder`: Core widget for building different layouts per screen size
+- `ResponsiveGrid`: Auto-adjusting grid layout (2/3/4 columns)
+- `ResponsiveStatsCard`: Dashboard cards that scale with screen size
+- `ResponsiveListTile`: List items optimized for different screen sizes
+- `ResponsiveScaffold`: Adaptive app structure with enhanced navigation
+- `ResponsiveHelper`: Utility functions for responsive calculations (`screens/`)
 
 Presentation layer containing all UI screens and user interfaces.
 
@@ -247,6 +275,13 @@ UI (Screens) ↔ State Management (Providers) ↔ Business Logic (Services) ↔ 
 5. **UI Refresh**: Providers notify listeners to update UI
 
 ## 🚀 Key Features
+
+### 📱 Responsive Design
+- **Cross-Platform Compatibility**: Works seamlessly on mobile, tablet, and desktop
+- **Adaptive Layouts**: Different UI layouts for different screen sizes
+- **Responsive Components**: All UI elements scale appropriately
+- **Device-Specific Navigation**: Enhanced navigation for larger screens
+- **Font Scaling**: Supports system accessibility preferences
 
 ### Offline-First Architecture
 - Local SQLite database for primary storage
@@ -393,6 +428,9 @@ test/
 - Navigation and routing
 - Theme management
 - Offline-first architecture
+- **Responsive design for all screen sizes**
+- **Adaptive UI components and layouts**
+- **Cross-platform responsive navigation**
 
 ### 🚧 In Progress
 - Additional UI screens
