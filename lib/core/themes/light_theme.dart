@@ -20,8 +20,6 @@ class AppTheme {
         onError: AppColors.white,
         surface: AppColors.lightSurface,
         onSurface: AppColors.lightOnSurface,
-        background: AppColors.lightBackground,
-        onBackground: AppColors.lightOnBackground,
       ),
 
       // App Bar Theme
@@ -46,7 +44,7 @@ class AppTheme {
       cardTheme: CardThemeData(
         color: AppColors.lightSurface,
         elevation: 2,
-        shadowColor: AppColors.black.withOpacity(0.1),
+        shadowColor: AppColors.black.withValues(alpha: 0.1),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.all(8),
       ),
@@ -147,15 +145,15 @@ class AppTheme {
 
       // Switch Theme
       switchTheme: SwitchThemeData(
-        thumbColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return AppColors.primary;
           }
           return AppColors.grey400;
         }),
-        trackColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
-            return AppColors.primary.withOpacity(0.3);
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.primary.withValues(alpha: 0.3);
           }
           return AppColors.grey300;
         }),
@@ -163,21 +161,21 @@ class AppTheme {
 
       // Checkbox Theme
       checkboxTheme: CheckboxThemeData(
-        fillColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return AppColors.primary;
           }
           return AppColors.transparent;
         }),
-        checkColor: MaterialStateProperty.all(AppColors.white),
+        checkColor: WidgetStateProperty.all(AppColors.white),
         side: const BorderSide(color: AppColors.grey400, width: 2),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),
 
       // Radio Theme
       radioTheme: RadioThemeData(
-        fillColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return AppColors.primary;
           }
           return AppColors.grey400;

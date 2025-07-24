@@ -47,7 +47,7 @@ class ResponsiveStatsCard extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.all(isLargeScreen ? 12 : 8),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(isLargeScreen ? 12 : 8),
                   ),
                   child: Icon(

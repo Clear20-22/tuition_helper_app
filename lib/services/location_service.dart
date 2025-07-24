@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -55,7 +56,7 @@ class LocationService {
 
       return _currentPosition;
     } catch (e) {
-      print('Error getting current position: $e');
+      debugPrint('Error getting current position: $e');
       return null;
     }
   }
@@ -82,11 +83,11 @@ class LocationService {
               _onLocationUpdate(position);
             },
             onError: (error) {
-              print('Location tracking error: $error');
+              debugPrint('Location tracking error: $error');
             },
           );
     } catch (e) {
-      print('Error starting location tracking: $e');
+      debugPrint('Error starting location tracking: $e');
     }
   }
 
@@ -122,7 +123,7 @@ class LocationService {
 
   // Handle location entered
   void _onLocationEntered(LocationModel location, double distance) {
-    print(
+    debugPrint(
       'Entered location: ${location.name} (${distance.toStringAsFixed(2)}m away)',
     );
     // You can add notification logic here
@@ -155,7 +156,7 @@ class LocationService {
         return _formatAddress(placemark);
       }
     } catch (e) {
-      print('Error getting address: $e');
+      debugPrint('Error getting address: $e');
     }
     return 'Unknown location';
   }
@@ -165,7 +166,7 @@ class LocationService {
     try {
       return await locationFromAddress(address);
     } catch (e) {
-      print('Error getting coordinates: $e');
+      debugPrint('Error getting coordinates: $e');
       return [];
     }
   }

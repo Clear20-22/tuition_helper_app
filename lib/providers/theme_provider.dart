@@ -322,9 +322,4 @@ class ThemeProvider extends ChangeNotifier {
   TextTheme get textTheme {
     return isDarkMode ? darkTheme.textTheme : lightTheme.textTheme;
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }

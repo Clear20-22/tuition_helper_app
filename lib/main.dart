@@ -9,9 +9,9 @@ void main() async {
     // Try to initialize Firebase (optional for development)
     try {
       await Firebase.initializeApp();
-      print('Firebase initialized successfully');
+      debugPrint('Firebase initialized successfully');
     } catch (firebaseError) {
-      print(
+      debugPrint(
         'Firebase initialization failed (continuing without Firebase): $firebaseError',
       );
     }

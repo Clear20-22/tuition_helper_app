@@ -120,7 +120,7 @@ class NotificationModel extends Equatable {
       'title': title,
       'body': body,
       'type': type,
-      'data': data != null ? data.toString() : null,
+      'data': data?.toString(),
       'scheduled_date': DateTimeUtils.formatDateTime(scheduledDate),
       'is_read': isRead ? 1 : 0,
       'is_local': isLocal ? 1 : 0,

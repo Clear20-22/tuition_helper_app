@@ -62,24 +62,24 @@ class AppInitializer {
       // Initialize storage service
       final storageService = StorageService();
       await storageService.initHive();
-      print('Storage service initialized successfully');
+      debugPrint('Storage service initialized successfully');
 
       // Initialize notification service
       try {
         final notificationService = NotificationService();
         await notificationService.initialize();
-        print('Notification service initialized successfully');
+        debugPrint('Notification service initialized successfully');
       } catch (e) {
-        print('Notification service initialization failed: $e');
+        debugPrint('Notification service initialization failed: $e');
       }
 
       // Initialize location service
       try {
         final locationService = LocationService();
         await locationService.initialize();
-        print('Location service initialized successfully');
+        debugPrint('Location service initialized successfully');
       } catch (e) {
-        print('Location service initialization failed: $e');
+        debugPrint('Location service initialization failed: $e');
       }
     } catch (e) {
       debugPrint('Error initializing app: $e');

@@ -2,7 +2,6 @@ import 'package:table_calendar/table_calendar.dart';
 import '../models/session_model.dart';
 import '../models/payment_model.dart';
 import 'storage_service.dart';
-import 'database_service.dart';
 
 class CalendarService {
   static final CalendarService _instance = CalendarService._internal();
@@ -10,7 +9,6 @@ class CalendarService {
   CalendarService._internal();
 
   final StorageService _storageService = StorageService();
-  final DatabaseService _databaseService = DatabaseService();
 
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();

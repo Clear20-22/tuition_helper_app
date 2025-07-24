@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/guardian_model.dart';
 import '../models/student_model.dart';
@@ -25,7 +24,7 @@ class DatabaseService {
 
   Future<Database> _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'tuition_helper.db');
+    String path = '${documentsDirectory.path}/tuition_helper.db';
 
     return await openDatabase(
       path,

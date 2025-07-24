@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'storage_service.dart';
-import 'database_service.dart';
 
 class BackupService {
   static final BackupService _instance = BackupService._internal();
@@ -14,7 +14,6 @@ class BackupService {
   BackupService._internal();
 
   final StorageService _storageService = StorageService();
-  final DatabaseService _databaseService = DatabaseService();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Create backup
@@ -90,7 +89,7 @@ class BackupService {
 
       // Check connectivity
       final connectivityResult = await Connectivity().checkConnectivity();
-      if (connectivityResult == ConnectivityResult.none) {
+      if (connectivityResult.contains(ConnectivityResult.none)) {
         return; // Skip if no internet connection
       }
 
@@ -107,7 +106,7 @@ class BackupService {
       // Clean up old backups
       await _cleanupOldBackups();
     } catch (e) {
-      print('Auto backup failed: $e');
+      debugPrint('Auto backup failed: $e');
     }
   }
 
@@ -172,7 +171,7 @@ class BackupService {
 
       // Check connectivity
       final connectivityResult = await Connectivity().checkConnectivity();
-      if (connectivityResult == ConnectivityResult.none) {
+      if (connectivityResult.contains(ConnectivityResult.none)) {
         throw Exception('No internet connection');
       }
 
@@ -222,7 +221,7 @@ class BackupService {
             'recordCount': _getRecordCount(data),
           });
         } catch (e) {
-          print('Error reading backup file ${file.path}: $e');
+          debugPrint('Error reading backup file ${file.path}: $e');
         }
       }
 
@@ -319,7 +318,7 @@ class BackupService {
         }
       }
     } catch (e) {
-      print('Error cleaning up old backups: $e');
+      debugPrint('Error cleaning up old backups: $e');
     }
   }
 

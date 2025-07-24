@@ -1,5 +1,4 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 import '../constants/app_constants.dart';
 
 class DatabaseConfig {
@@ -13,7 +12,7 @@ class DatabaseConfig {
 
   static Future<Database> _initDatabase() async {
     final databasePath = await getDatabasesPath();
-    final path = join(databasePath, AppConstants.databaseName);
+    final path = '$databasePath/${AppConstants.databaseName}';
 
     return await openDatabase(
       path,
@@ -193,7 +192,7 @@ class DatabaseConfig {
 
   static Future<void> deleteDatabase() async {
     final databasePath = await getDatabasesPath();
-    final path = join(databasePath, AppConstants.databaseName);
+    final path = '$databasePath/${AppConstants.databaseName}';
     await databaseFactory.deleteDatabase(path);
     _database = null;
   }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -31,7 +32,7 @@ class NotificationService {
     try {
       await _initializeFirebaseMessaging();
     } catch (e) {
-      print(
+      debugPrint(
         'Firebase messaging initialization failed (continuing without FCM): $e',
       );
     }
@@ -80,11 +81,11 @@ class NotificationService {
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
+      debugPrint('User granted permission');
 
       // Get FCM token
       String? token = await _firebaseMessaging.getToken();
-      print('FCM Token: $token');
+      debugPrint('FCM Token: $token');
 
       // Handle foreground messages
       FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
@@ -95,7 +96,7 @@ class NotificationService {
       // Handle notification taps when app is in background
       FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
     } else {
-      print('User declined or has not accepted permission');
+      debugPrint('User declined or has not accepted permission');
     }
   }
 
@@ -110,7 +111,7 @@ class NotificationService {
         final data = jsonDecode(payload);
         _handleNotificationAction(data);
       } catch (e) {
-        print('Error parsing notification payload: $e');
+        debugPrint('Error parsing notification payload: $e');
       }
     }
   }
@@ -128,7 +129,7 @@ class NotificationService {
   }
 
   static Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-    print('Handling background message: ${message.messageId}');
+    debugPrint('Handling background message: ${message.messageId}');
     // This function must be a top-level function
   }
 
@@ -138,7 +139,7 @@ class NotificationService {
 
   void _handleNotificationAction(Map<String, dynamic> data) {
     final type = data['type'] ?? '';
-    final id = data['id'] ?? '';
+    // final id = data['id'] ?? ''; // Unused for now
 
     switch (type) {
       case 'session_reminder':

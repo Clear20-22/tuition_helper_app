@@ -123,7 +123,7 @@ class _SplashScreenState extends State<SplashScreen>
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: 0.2),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
                           ),
@@ -162,7 +162,7 @@ class _SplashScreenState extends State<SplashScreen>
               child: Text(
                 AppConstants.appTagline,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -186,7 +186,7 @@ class _SplashScreenState extends State<SplashScreen>
               child: Text(
                 'Initializing...',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.white.withOpacity(0.7),
+                  color: Colors.white.withValues(alpha: 0.7),
                 ),
               ),
             ),
