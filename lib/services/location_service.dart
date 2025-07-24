@@ -16,7 +16,7 @@ class LocationService {
 
   StreamSubscription<Position>? _positionStream;
   Position? _currentPosition;
-  
+
   static const double _defaultRadius = 100.0; // meters
 
   // Initialize location service
@@ -73,17 +73,18 @@ class LocationService {
         distanceFilter: 10, // Update every 10 meters
       );
 
-      _positionStream = Geolocator.getPositionStream(
-        locationSettings: locationSettings,
-      ).listen(
-        (Position position) {
-          _currentPosition = position;
-          _onLocationUpdate(position);
-        },
-        onError: (error) {
-          print('Location tracking error: $error');
-        },
-      );
+      _positionStream =
+          Geolocator.getPositionStream(
+            locationSettings: locationSettings,
+          ).listen(
+            (Position position) {
+              _currentPosition = position;
+              _onLocationUpdate(position);
+            },
+            onError: (error) {
+              print('Location tracking error: $error');
+            },
+          );
     } catch (e) {
       print('Error starting location tracking: $e');
     }
@@ -104,7 +105,7 @@ class LocationService {
   // Check if user is near any saved locations
   Future<void> _checkNearbyLocations(Position currentPosition) async {
     final savedLocations = _storageService.getActiveLocations();
-    
+
     for (final location in savedLocations) {
       final distance = Geolocator.distanceBetween(
         currentPosition.latitude,
@@ -121,7 +122,9 @@ class LocationService {
 
   // Handle location entered
   void _onLocationEntered(LocationModel location, double distance) {
-    print('Entered location: ${location.name} (${distance.toStringAsFixed(2)}m away)');
+    print(
+      'Entered location: ${location.name} (${distance.toStringAsFixed(2)}m away)',
+    );
     // You can add notification logic here
   }
 
@@ -170,7 +173,7 @@ class LocationService {
   // Format address from placemark
   String _formatAddress(Placemark placemark) {
     final parts = <String>[];
-    
+
     if (placemark.street?.isNotEmpty == true) {
       parts.add(placemark.street!);
     }
@@ -311,7 +314,10 @@ class LocationService {
   }
 
   // Check if user is at a specific location
-  Future<bool> isAtLocation(LocationModel location, {double radiusInMeters = 100}) async {
+  Future<bool> isAtLocation(
+    LocationModel location, {
+    double radiusInMeters = 100,
+  }) async {
     final currentPosition = await getCurrentPosition();
     if (currentPosition == null) return false;
 
@@ -341,11 +347,11 @@ class LocationService {
   List<LocationModel> searchLocations(String query) {
     final locations = getAllLocations();
     final lowerQuery = query.toLowerCase();
-    
+
     return locations.where((location) {
       return location.name.toLowerCase().contains(lowerQuery) ||
-             location.address.toLowerCase().contains(lowerQuery) ||
-             (location.description?.toLowerCase().contains(lowerQuery) ?? false);
+          location.address.toLowerCase().contains(lowerQuery) ||
+          (location.description?.toLowerCase().contains(lowerQuery) ?? false);
     }).toList();
   }
 
@@ -353,7 +359,7 @@ class LocationService {
   Map<String, dynamic> getLocationStats() {
     final locations = getAllLocations();
     final activeLocations = getActiveLocations();
-    
+
     return {
       'totalLocations': locations.length,
       'activeLocations': activeLocations.length,

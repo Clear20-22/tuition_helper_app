@@ -11,7 +11,7 @@ class NotificationService {
   factory NotificationService() => _instance;
   NotificationService._internal();
 
-  final FlutterLocalNotificationsPlugin _localNotifications = 
+  final FlutterLocalNotificationsPlugin _localNotifications =
       FlutterLocalNotificationsPlugin();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final StorageService _storageService = StorageService();
@@ -19,15 +19,22 @@ class NotificationService {
 
   static const AndroidNotificationChannel _defaultChannel =
       AndroidNotificationChannel(
-    'tuition_helper_channel',
-    'Tuition Helper Notifications',
-    description: 'Notifications for tuition sessions, payments, and reminders',
-    importance: Importance.high,
-  );
+        'tuition_helper_channel',
+        'Tuition Helper Notifications',
+        description:
+            'Notifications for tuition sessions, payments, and reminders',
+        importance: Importance.high,
+      );
 
   Future<void> initialize() async {
     await _initializeLocalNotifications();
-    await _initializeFirebaseMessaging();
+    try {
+      await _initializeFirebaseMessaging();
+    } catch (e) {
+      print(
+        'Firebase messaging initialization failed (continuing without FCM): $e',
+      );
+    }
     await _requestPermissions();
   }
 
@@ -37,10 +44,10 @@ class NotificationService {
 
     const DarwinInitializationSettings iosSettings =
         DarwinInitializationSettings(
-      requestSoundPermission: true,
-      requestBadgePermission: true,
-      requestAlertPermission: true,
-    );
+          requestSoundPermission: true,
+          requestBadgePermission: true,
+          requestAlertPermission: true,
+        );
 
     const InitializationSettings settings = InitializationSettings(
       android: androidSettings,
@@ -55,7 +62,8 @@ class NotificationService {
     // Create notification channel for Android
     await _localNotifications
         .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin
+        >()
         ?.createNotificationChannel(_defaultChannel);
   }
 
@@ -73,7 +81,7 @@ class NotificationService {
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       print('User granted permission');
-      
+
       // Get FCM token
       String? token = await _firebaseMessaging.getToken();
       print('FCM Token: $token');
@@ -196,7 +204,8 @@ class NotificationService {
         android: AndroidNotificationDetails(
           'tuition_helper_channel',
           'Tuition Helper Notifications',
-          channelDescription: 'Notifications for tuition sessions, payments, and reminders',
+          channelDescription:
+              'Notifications for tuition sessions, payments, and reminders',
           importance: Importance.high,
           priority: Priority.high,
         ),
@@ -223,7 +232,8 @@ class NotificationService {
         android: AndroidNotificationDetails(
           'tuition_helper_channel',
           'Tuition Helper Notifications',
-          channelDescription: 'Notifications for tuition sessions, payments, and reminders',
+          channelDescription:
+              'Notifications for tuition sessions, payments, and reminders',
           importance: Importance.high,
           priority: Priority.high,
         ),
@@ -242,17 +252,14 @@ class NotificationService {
     Duration reminderBefore = const Duration(hours: 1),
   }) async {
     final reminderDate = sessionDate.subtract(reminderBefore);
-    
+
     await scheduleNotification(
       id: 'session_reminder_$sessionId',
       title: 'Session Reminder',
       body: 'You have a $subject session with $studentName in 1 hour',
       scheduledDate: reminderDate,
       type: 'session_reminder',
-      data: {
-        'sessionId': sessionId,
-        'type': 'session_reminder',
-      },
+      data: {'sessionId': sessionId, 'type': 'session_reminder'},
     );
   }
 
@@ -265,17 +272,15 @@ class NotificationService {
     Duration reminderBefore = const Duration(days: 3),
   }) async {
     final reminderDate = dueDate.subtract(reminderBefore);
-    
+
     await scheduleNotification(
       id: 'payment_reminder_$paymentId',
       title: 'Payment Reminder',
-      body: 'Payment of \$${amount.toStringAsFixed(2)} from $guardianName is due in 3 days',
+      body:
+          'Payment of \$${amount.toStringAsFixed(2)} from $guardianName is due in 3 days',
       scheduledDate: reminderDate,
       type: 'payment_due',
-      data: {
-        'paymentId': paymentId,
-        'type': 'payment_due',
-      },
+      data: {'paymentId': paymentId, 'type': 'payment_due'},
     );
   }
 
@@ -330,7 +335,7 @@ class NotificationService {
   Future<void> cleanupOldNotifications() async {
     final cutoffDate = DateTime.now().subtract(const Duration(days: 30));
     final allNotifications = _storageService.getAllNotifications();
-    
+
     for (final notification in allNotifications) {
       if (notification.createdAt.isBefore(cutoffDate) && notification.isRead) {
         await _storageService.deleteNotification(notification.id);

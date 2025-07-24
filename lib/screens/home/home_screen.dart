@@ -44,10 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.dashboard),
             label: 'Dashboard',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'Guardians',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Guardians'),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
             label: 'Calendar',
@@ -160,23 +157,16 @@ class _StatCard extends StatelessWidget {
             color: color.withOpacity(0.1),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(
-            icon,
-            size: 32,
-            color: color,
-          ),
+          child: Icon(icon, size: 32, color: color),
         ),
         const SizedBox(height: 8),
         Text(
           value,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
         ),
-        Text(
-          title,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
+        Text(title, style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }
@@ -198,11 +188,7 @@ class GuardiansTab extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.people_outline,
-                  size: 64,
-                  color: Colors.grey[400],
-                ),
+                Icon(Icons.people_outline, size: 64, color: Colors.grey[400]),
                 const SizedBox(height: 16),
                 Text(
                   'No guardians yet',
@@ -237,7 +223,9 @@ class GuardiansTab extends StatelessWidget {
                 leading: CircleAvatar(
                   backgroundColor: Theme.of(context).primaryColor,
                   child: Text(
-                    guardian.name.isNotEmpty ? guardian.name[0].toUpperCase() : 'G',
+                    guardian.name.isNotEmpty
+                        ? guardian.name[0].toUpperCase()
+                        : 'G',
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -245,11 +233,11 @@ class GuardiansTab extends StatelessWidget {
                   ),
                 ),
                 title: Text(guardian.name),
-                subtitle: guardian.email != null 
-                    ? Text(guardian.email!) 
-                    : guardian.phone != null 
-                        ? Text(guardian.phone!)
-                        : const Text('No contact info'),
+                subtitle: guardian.email != null
+                    ? Text(guardian.email!)
+                    : guardian.phone != null
+                    ? Text(guardian.phone!)
+                    : const Text('No contact info'),
                 trailing: PopupMenuButton<String>(
                   onSelected: (value) {
                     switch (value) {
@@ -261,7 +249,11 @@ class GuardiansTab extends StatelessWidget {
                         );
                         break;
                       case 'delete':
-                        _showDeleteDialog(context, guardianProvider, guardian.id);
+                        _showDeleteDialog(
+                          context,
+                          guardianProvider,
+                          guardian.id,
+                        );
                         break;
                     }
                   },
@@ -299,12 +291,18 @@ class GuardiansTab extends StatelessWidget {
     );
   }
 
-  void _showDeleteDialog(BuildContext context, GuardianProvider provider, String id) {
+  void _showDeleteDialog(
+    BuildContext context,
+    GuardianProvider provider,
+    String id,
+  ) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Guardian'),
-        content: const Text('Are you sure you want to delete this guardian? This action cannot be undone.'),
+        content: const Text(
+          'Are you sure you want to delete this guardian? This action cannot be undone.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -328,9 +326,7 @@ class CalendarTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Calendar view coming soon...'),
-    );
+    return const Center(child: Text('Calendar view coming soon...'));
   }
 }
 

@@ -18,7 +18,7 @@ class _GuardianAddScreenState extends State<GuardianAddScreen> {
   final _addressController = TextEditingController();
   final _emergencyContactController = TextEditingController();
   final _notesController = TextEditingController();
-  
+
   bool _isLoading = false;
 
   @override
@@ -138,11 +138,21 @@ class _GuardianAddScreenState extends State<GuardianAddScreen> {
       final provider = Provider.of<GuardianProvider>(context, listen: false);
       await provider.addGuardian(
         name: _nameController.text.trim(),
-        email: _emailController.text.trim().isEmpty ? null : _emailController.text.trim(),
-        phone: _phoneController.text.trim().isEmpty ? null : _phoneController.text.trim(),
-        address: _addressController.text.trim().isEmpty ? null : _addressController.text.trim(),
-        emergencyContact: _emergencyContactController.text.trim().isEmpty ? null : _emergencyContactController.text.trim(),
-        notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+        email: _emailController.text.trim().isEmpty
+            ? null
+            : _emailController.text.trim(),
+        phone: _phoneController.text.trim().isEmpty
+            ? null
+            : _phoneController.text.trim(),
+        address: _addressController.text.trim().isEmpty
+            ? null
+            : _addressController.text.trim(),
+        emergencyContact: _emergencyContactController.text.trim().isEmpty
+            ? null
+            : _emergencyContactController.text.trim(),
+        notes: _notesController.text.trim().isEmpty
+            ? null
+            : _notesController.text.trim(),
       );
 
       if (mounted) {
@@ -153,9 +163,9 @@ class _GuardianAddScreenState extends State<GuardianAddScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error adding guardian: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error adding guardian: $e')));
       }
     } finally {
       if (mounted) {

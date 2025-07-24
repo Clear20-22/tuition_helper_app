@@ -228,7 +228,7 @@ class ValidationUtils {
   }
 
   // Boolean validation methods for convenience
-  
+
   /// Checks if email is valid (returns boolean)
   static bool isValidEmail(String? value) {
     return validateEmail(value) == null;

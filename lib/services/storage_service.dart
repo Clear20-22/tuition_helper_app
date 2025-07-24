@@ -30,7 +30,7 @@ class StorageService {
 
   Future<void> initHive() async {
     await Hive.initFlutter();
-    
+
     // Register adapters
     if (!Hive.isAdapterRegistered(0)) {
       Hive.registerAdapter(GuardianModelAdapter());
@@ -56,7 +56,9 @@ class StorageService {
     _studentBox = await Hive.openBox<StudentModel>(_studentBoxName);
     _sessionBox = await Hive.openBox<SessionModel>(_sessionBoxName);
     _paymentBox = await Hive.openBox<PaymentModel>(_paymentBoxName);
-    _notificationBox = await Hive.openBox<NotificationModel>(_notificationBoxName);
+    _notificationBox = await Hive.openBox<NotificationModel>(
+      _notificationBoxName,
+    );
     _locationBox = await Hive.openBox<LocationModel>(_locationBoxName);
     _settingsBox = await Hive.openBox(_settingsBoxName);
   }
@@ -93,8 +95,9 @@ class StorageService {
 
   List<StudentModel> getStudentsByGuardianId(String guardianId) {
     return _studentBox?.values
-        .where((student) => student.guardianId == guardianId)
-        .toList() ?? [];
+            .where((student) => student.guardianId == guardianId)
+            .toList() ??
+        [];
   }
 
   Future<void> deleteStudent(String id) async {
@@ -116,16 +119,22 @@ class StorageService {
 
   List<SessionModel> getSessionsByStudentId(String studentId) {
     return _sessionBox?.values
-        .where((session) => session.studentId == studentId)
-        .toList() ?? [];
+            .where((session) => session.studentId == studentId)
+            .toList() ??
+        [];
   }
 
   List<SessionModel> getSessionsByDateRange(DateTime start, DateTime end) {
     return _sessionBox?.values
-        .where((session) => 
-            session.date.isAfter(start.subtract(const Duration(days: 1))) &&
-            session.date.isBefore(end.add(const Duration(days: 1))))
-        .toList() ?? [];
+            .where(
+              (session) =>
+                  session.date.isAfter(
+                    start.subtract(const Duration(days: 1)),
+                  ) &&
+                  session.date.isBefore(end.add(const Duration(days: 1))),
+            )
+            .toList() ??
+        [];
   }
 
   Future<void> deleteSession(String id) async {
@@ -147,17 +156,19 @@ class StorageService {
 
   List<PaymentModel> getPaymentsByGuardianId(String guardianId) {
     return _paymentBox?.values
-        .where((payment) => payment.guardianId == guardianId)
-        .toList() ?? [];
+            .where((payment) => payment.guardianId == guardianId)
+            .toList() ??
+        [];
   }
 
   List<PaymentModel> getOverduePayments() {
     final now = DateTime.now();
     return _paymentBox?.values
-        .where((payment) => 
-            payment.dueDate.isBefore(now) && 
-            !payment.isPaid)
-        .toList() ?? [];
+            .where(
+              (payment) => payment.dueDate.isBefore(now) && !payment.isPaid,
+            )
+            .toList() ??
+        [];
   }
 
   Future<void> deletePayment(String id) async {
@@ -181,8 +192,9 @@ class StorageService {
 
   List<NotificationModel> getUnreadNotifications() {
     return _notificationBox?.values
-        .where((notification) => !notification.isRead)
-        .toList() ?? [];
+            .where((notification) => !notification.isRead)
+            .toList() ??
+        [];
   }
 
   Future<void> deleteNotification(String id) async {
@@ -204,8 +216,9 @@ class StorageService {
 
   List<LocationModel> getActiveLocations() {
     return _locationBox?.values
-        .where((location) => location.isActive)
-        .toList() ?? [];
+            .where((location) => location.isActive)
+            .toList() ??
+        [];
   }
 
   Future<void> deleteLocation(String id) async {
@@ -232,7 +245,7 @@ class StorageService {
 
   Future<T?> getSetting<T>(String key, {T? defaultValue}) async {
     final prefs = await SharedPreferences.getInstance();
-    
+
     if (T == String) {
       return prefs.getString(key) as T? ?? defaultValue;
     } else if (T == int) {
@@ -257,38 +270,38 @@ class StorageService {
   // Sync operations
   List<GuardianModel> getUnsyncedGuardians() {
     return _guardianBox?.values
-        .where((guardian) => !guardian.isSynced)
-        .toList() ?? [];
+            .where((guardian) => !guardian.isSynced)
+            .toList() ??
+        [];
   }
 
   List<StudentModel> getUnsyncedStudents() {
-    return _studentBox?.values
-        .where((student) => !student.isSynced)
-        .toList() ?? [];
+    return _studentBox?.values.where((student) => !student.isSynced).toList() ??
+        [];
   }
 
   List<SessionModel> getUnsyncedSessions() {
-    return _sessionBox?.values
-        .where((session) => !session.isSynced)
-        .toList() ?? [];
+    return _sessionBox?.values.where((session) => !session.isSynced).toList() ??
+        [];
   }
 
   List<PaymentModel> getUnsyncedPayments() {
-    return _paymentBox?.values
-        .where((payment) => !payment.isSynced)
-        .toList() ?? [];
+    return _paymentBox?.values.where((payment) => !payment.isSynced).toList() ??
+        [];
   }
 
   List<NotificationModel> getUnsyncedNotifications() {
     return _notificationBox?.values
-        .where((notification) => !notification.isSynced)
-        .toList() ?? [];
+            .where((notification) => !notification.isSynced)
+            .toList() ??
+        [];
   }
 
   List<LocationModel> getUnsyncedLocations() {
     return _locationBox?.values
-        .where((location) => !location.isSynced)
-        .toList() ?? [];
+            .where((location) => !location.isSynced)
+            .toList() ??
+        [];
   }
 
   // Clear all data
@@ -308,7 +321,8 @@ class StorageService {
       'students': _studentBox?.values.map((s) => s.toJson()).toList() ?? [],
       'sessions': _sessionBox?.values.map((s) => s.toJson()).toList() ?? [],
       'payments': _paymentBox?.values.map((p) => p.toJson()).toList() ?? [],
-      'notifications': _notificationBox?.values.map((n) => n.toJson()).toList() ?? [],
+      'notifications':
+          _notificationBox?.values.map((n) => n.toJson()).toList() ?? [],
       'locations': _locationBox?.values.map((l) => l.toJson()).toList() ?? [],
       'exportDate': DateTime.now().toIso8601String(),
     };

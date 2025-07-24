@@ -186,19 +186,19 @@ class NotificationModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        title,
-        body,
-        type,
-        data,
-        scheduledDate,
-        isRead,
-        isLocal,
-        imageUrl,
-        createdAt,
-        updatedAt,
-        isSynced,
-      ];
+    id,
+    title,
+    body,
+    type,
+    data,
+    scheduledDate,
+    isRead,
+    isLocal,
+    imageUrl,
+    createdAt,
+    updatedAt,
+    isSynced,
+  ];
 
   @override
   String toString() {

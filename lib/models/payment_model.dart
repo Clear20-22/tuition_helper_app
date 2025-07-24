@@ -214,21 +214,21 @@ class PaymentModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        guardianId,
-        studentId,
-        amount,
-        paymentMethod,
-        paymentDate,
-        dueDate,
-        status,
-        description,
-        receiptUrl,
-        transactionId,
-        createdAt,
-        updatedAt,
-        isSynced,
-      ];
+    id,
+    guardianId,
+    studentId,
+    amount,
+    paymentMethod,
+    paymentDate,
+    dueDate,
+    status,
+    description,
+    receiptUrl,
+    transactionId,
+    createdAt,
+    updatedAt,
+    isSynced,
+  ];
 
   @override
   String toString() {

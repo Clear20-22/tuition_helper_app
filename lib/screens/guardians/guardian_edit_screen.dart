@@ -6,10 +6,7 @@ import '../../core/utils/validation_utils.dart';
 class GuardianEditScreen extends StatefulWidget {
   final String guardianId;
 
-  const GuardianEditScreen({
-    super.key,
-    required this.guardianId,
-  });
+  const GuardianEditScreen({super.key, required this.guardianId});
 
   @override
   State<GuardianEditScreen> createState() => _GuardianEditScreenState();
@@ -24,7 +21,7 @@ class _GuardianEditScreenState extends State<GuardianEditScreen> {
   final _professionController = TextEditingController();
   final _emergencyContactController = TextEditingController();
   final _notesController = TextEditingController();
-  
+
   bool _isLoading = false;
   bool _isInitialized = false;
 
@@ -40,7 +37,7 @@ class _GuardianEditScreenState extends State<GuardianEditScreen> {
   void _initializeFields() {
     final provider = Provider.of<GuardianProvider>(context, listen: false);
     final guardian = provider.getGuardianById(widget.guardianId);
-    
+
     if (guardian != null) {
       _nameController.text = guardian.name;
       _emailController.text = guardian.email ?? '';
@@ -75,11 +72,9 @@ class _GuardianEditScreenState extends State<GuardianEditScreen> {
       body: Consumer<GuardianProvider>(
         builder: (context, provider, child) {
           final guardian = provider.getGuardianById(widget.guardianId);
-          
+
           if (guardian == null) {
-            return const Center(
-              child: Text('Guardian not found'),
-            );
+            return const Center(child: Text('Guardian not found'));
           }
 
           return Form(
@@ -193,12 +188,24 @@ class _GuardianEditScreenState extends State<GuardianEditScreen> {
       await provider.updateGuardian(
         id: widget.guardianId,
         name: _nameController.text.trim(),
-        email: _emailController.text.trim().isEmpty ? null : _emailController.text.trim(),
-        phone: _phoneController.text.trim().isEmpty ? null : _phoneController.text.trim(),
-        address: _addressController.text.trim().isEmpty ? null : _addressController.text.trim(),
-        profession: _professionController.text.trim().isEmpty ? null : _professionController.text.trim(),
-        emergencyContact: _emergencyContactController.text.trim().isEmpty ? null : _emergencyContactController.text.trim(),
-        notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+        email: _emailController.text.trim().isEmpty
+            ? null
+            : _emailController.text.trim(),
+        phone: _phoneController.text.trim().isEmpty
+            ? null
+            : _phoneController.text.trim(),
+        address: _addressController.text.trim().isEmpty
+            ? null
+            : _addressController.text.trim(),
+        profession: _professionController.text.trim().isEmpty
+            ? null
+            : _professionController.text.trim(),
+        emergencyContact: _emergencyContactController.text.trim().isEmpty
+            ? null
+            : _emergencyContactController.text.trim(),
+        notes: _notesController.text.trim().isEmpty
+            ? null
+            : _notesController.text.trim(),
       );
 
       if (mounted) {
@@ -209,9 +216,9 @@ class _GuardianEditScreenState extends State<GuardianEditScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error updating guardian: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error updating guardian: $e')));
       }
     } finally {
       if (mounted) {

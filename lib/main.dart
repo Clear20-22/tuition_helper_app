@@ -4,36 +4,45 @@ import 'app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   try {
-    // Initialize Firebase
-    await Firebase.initializeApp();
-    
+    // Try to initialize Firebase (optional for development)
+    try {
+      await Firebase.initializeApp();
+      print('Firebase initialized successfully');
+    } catch (firebaseError) {
+      print(
+        'Firebase initialization failed (continuing without Firebase): $firebaseError',
+      );
+    }
+
     // Initialize app services
     await AppInitializer.initialize();
-    
+
     runApp(const TuitionHelperApp());
   } catch (e) {
     // If initialization fails, show error screen
-    runApp(MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error, size: 64, color: Colors.red),
-              const SizedBox(height: 16),
-              Text('Failed to initialize app: $e'),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () => main(),
-                child: const Text('Retry'),
-              ),
-            ],
+    runApp(
+      MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error, size: 64, color: Colors.red),
+                const SizedBox(height: 16),
+                Text('Failed to initialize app: $e'),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => main(),
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    ));
+    );
   }
 }
 

@@ -25,22 +25,22 @@ class TuitionHelperApp extends StatelessWidget {
           return MaterialApp(
             title: AppConstants.appName,
             debugShowCheckedModeBanner: false,
-            
+
             // Theme configuration
             theme: themeProvider.lightTheme,
             darkTheme: themeProvider.darkTheme,
             themeMode: themeProvider.themeMode,
-            
+
             // Routing
             initialRoute: AppRoutes.splash,
             onGenerateRoute: RouteGenerator.generateRoute,
-            
+
             // Localization
             supportedLocales: const [
               Locale('en', 'US'),
               Locale('bn', 'BD'), // Bengali
             ],
-            
+
             builder: (context, child) {
               return MediaQuery(
                 data: MediaQuery.of(context).copyWith(
@@ -62,15 +62,25 @@ class AppInitializer {
       // Initialize storage service
       final storageService = StorageService();
       await storageService.initHive();
-      
+      print('Storage service initialized successfully');
+
       // Initialize notification service
-      final notificationService = NotificationService();
-      await notificationService.initialize();
-      
+      try {
+        final notificationService = NotificationService();
+        await notificationService.initialize();
+        print('Notification service initialized successfully');
+      } catch (e) {
+        print('Notification service initialization failed: $e');
+      }
+
       // Initialize location service
-      final locationService = LocationService();
-      await locationService.initialize();
-      
+      try {
+        final locationService = LocationService();
+        await locationService.initialize();
+        print('Location service initialized successfully');
+      } catch (e) {
+        print('Location service initialization failed: $e');
+      }
     } catch (e) {
       debugPrint('Error initializing app: $e');
       rethrow;

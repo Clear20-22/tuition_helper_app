@@ -21,12 +21,12 @@ class BackupService {
   Future<String> createBackup({bool includeLocalData = true}) async {
     try {
       final backupData = <String, dynamic>{};
-      
+
       // Add metadata
       backupData['version'] = '1.0';
       backupData['createdAt'] = DateTime.now().toIso8601String();
       backupData['deviceInfo'] = await _getDeviceInfo();
-      
+
       if (includeLocalData) {
         // Export data from storage service
         final exportedData = _storageService.exportData();
@@ -35,11 +35,12 @@ class BackupService {
 
       // Convert to JSON string
       final jsonString = jsonEncode(backupData);
-      
+
       // Save to file
-      final fileName = 'tuition_helper_backup_${DateTime.now().millisecondsSinceEpoch}.json';
+      final fileName =
+          'tuition_helper_backup_${DateTime.now().millisecondsSinceEpoch}.json';
       final filePath = await _saveBackupFile(fileName, jsonString);
-      
+
       return filePath;
     } catch (e) {
       throw Exception('Failed to create backup: $e');
@@ -64,7 +65,6 @@ class BackupService {
 
       // Import data
       await _storageService.importData(backupData);
-      
     } catch (e) {
       throw Exception('Failed to restore backup: $e');
     }
@@ -73,13 +73,15 @@ class BackupService {
   // Auto backup
   Future<void> autoBackup() async {
     try {
-      final lastBackup = await _storageService.getSetting<String>('last_auto_backup');
+      final lastBackup = await _storageService.getSetting<String>(
+        'last_auto_backup',
+      );
       final now = DateTime.now();
-      
+
       if (lastBackup != null) {
         final lastBackupDate = DateTime.parse(lastBackup);
         final daysSinceLastBackup = now.difference(lastBackupDate).inDays;
-        
+
         // Skip if backup was created less than 7 days ago
         if (daysSinceLastBackup < 7) {
           return;
@@ -94,14 +96,16 @@ class BackupService {
 
       // Create backup
       final backupPath = await createBackup();
-      
+
       // Save backup info
-      await _storageService.saveSetting('last_auto_backup', now.toIso8601String());
+      await _storageService.saveSetting(
+        'last_auto_backup',
+        now.toIso8601String(),
+      );
       await _storageService.saveSetting('last_backup_path', backupPath);
-      
+
       // Clean up old backups
       await _cleanupOldBackups();
-      
     } catch (e) {
       print('Auto backup failed: $e');
     }
@@ -123,7 +127,8 @@ class BackupService {
       // Let user choose location
       final result = await FilePicker.platform.saveFile(
         dialogTitle: 'Save Backup File',
-        fileName: 'tuition_helper_backup_${DateTime.now().millisecondsSinceEpoch}.json',
+        fileName:
+            'tuition_helper_backup_${DateTime.now().millisecondsSinceEpoch}.json',
         type: FileType.custom,
         allowedExtensions: ['json'],
       );
@@ -133,7 +138,7 @@ class BackupService {
         await file.writeAsString(jsonString);
         return result;
       }
-      
+
       return null;
     } catch (e) {
       throw Exception('Failed to export backup: $e');
@@ -177,12 +182,13 @@ class BackupService {
       backupData['userEmail'] = user.email;
 
       final jsonString = jsonEncode(backupData);
-      
+
       // Here you would implement Firebase Storage or another cloud service
       // For now, we'll save it locally and return the path
-      final fileName = 'cloud_backup_${user.uid}_${DateTime.now().millisecondsSinceEpoch}.json';
+      final fileName =
+          'cloud_backup_${user.uid}_${DateTime.now().millisecondsSinceEpoch}.json';
       final filePath = await _saveBackupFile(fileName, jsonString);
-      
+
       return filePath;
     } catch (e) {
       throw Exception('Failed to create cloud backup: $e');
@@ -193,19 +199,20 @@ class BackupService {
   Future<List<Map<String, dynamic>>> getBackupHistory() async {
     try {
       final backupsDir = await _getBackupsDirectory();
-      final files = backupsDir.listSync()
+      final files = backupsDir
+          .listSync()
           .where((entity) => entity is File && entity.path.endsWith('.json'))
           .cast<File>()
           .toList();
 
       final backups = <Map<String, dynamic>>[];
-      
+
       for (final file in files) {
         try {
           final stat = await file.stat();
           final jsonString = await file.readAsString();
           final data = jsonDecode(jsonString) as Map<String, dynamic>;
-          
+
           backups.add({
             'path': file.path,
             'name': file.path.split('/').last,
@@ -218,10 +225,10 @@ class BackupService {
           print('Error reading backup file ${file.path}: $e');
         }
       }
-      
+
       // Sort by creation date (newest first)
       backups.sort((a, b) => b['createdAt'].compareTo(a['createdAt']));
-      
+
       return backups;
     } catch (e) {
       throw Exception('Failed to get backup history: $e');
@@ -243,8 +250,15 @@ class BackupService {
   // Validate backup data structure
   bool _validateBackupData(Map<String, dynamic> data) {
     final requiredKeys = ['version', 'createdAt', 'exportDate'];
-    final dataKeys = ['guardians', 'students', 'sessions', 'payments', 'notifications', 'locations'];
-    
+    final dataKeys = [
+      'guardians',
+      'students',
+      'sessions',
+      'payments',
+      'notifications',
+      'locations',
+    ];
+
     // Check if it has required metadata
     for (final key in requiredKeys) {
       if (!data.containsKey(key)) {
@@ -286,13 +300,16 @@ class BackupService {
   Future<void> _cleanupOldBackups() async {
     try {
       final backupsDir = await _getBackupsDirectory();
-      final files = backupsDir.listSync()
+      final files = backupsDir
+          .listSync()
           .where((entity) => entity is File && entity.path.endsWith('.json'))
           .cast<File>()
           .toList();
 
       // Sort by modification date
-      files.sort((a, b) => b.statSync().modified.compareTo(a.statSync().modified));
+      files.sort(
+        (a, b) => b.statSync().modified.compareTo(a.statSync().modified),
+      );
 
       // Keep only the 10 most recent backups
       const maxBackups = 10;
@@ -309,14 +326,21 @@ class BackupService {
   // Get record count from backup data
   int _getRecordCount(Map<String, dynamic> data) {
     int count = 0;
-    final dataKeys = ['guardians', 'students', 'sessions', 'payments', 'notifications', 'locations'];
-    
+    final dataKeys = [
+      'guardians',
+      'students',
+      'sessions',
+      'payments',
+      'notifications',
+      'locations',
+    ];
+
     for (final key in dataKeys) {
       if (data[key] is List) {
         count += (data[key] as List).length;
       }
     }
-    
+
     return count;
   }
 
@@ -325,19 +349,22 @@ class BackupService {
     const suffixes = ['B', 'KB', 'MB', 'GB'];
     int i = 0;
     double size = bytes.toDouble();
-    
+
     while (size >= 1024 && i < suffixes.length - 1) {
       size /= 1024;
       i++;
     }
-    
+
     return '${size.toStringAsFixed(2)} ${suffixes[i]}';
   }
 
   // Schedule automatic backups
   Future<void> scheduleAutoBackup(Duration interval) async {
     await _storageService.saveSetting('auto_backup_enabled', true);
-    await _storageService.saveSetting('auto_backup_interval_hours', interval.inHours);
+    await _storageService.saveSetting(
+      'auto_backup_interval_hours',
+      interval.inHours,
+    );
   }
 
   // Disable automatic backups
@@ -347,6 +374,10 @@ class BackupService {
 
   // Check if auto backup is enabled
   Future<bool> isAutoBackupEnabled() async {
-    return await _storageService.getSetting<bool>('auto_backup_enabled', defaultValue: false) ?? false;
+    return await _storageService.getSetting<bool>(
+          'auto_backup_enabled',
+          defaultValue: false,
+        ) ??
+        false;
   }
 }

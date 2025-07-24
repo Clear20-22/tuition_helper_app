@@ -31,21 +31,13 @@ class _SplashScreenState extends State<SplashScreen>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeIn,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
+    );
 
-    _scaleAnimation = Tween<double>(
-      begin: 0.5,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.elasticOut,
-    ));
+    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.elasticOut),
+    );
 
     _animationController.forward();
   }
@@ -57,7 +49,10 @@ class _SplashScreenState extends State<SplashScreen>
       await themeProvider.initialize();
 
       // Initialize guardian provider
-      final guardianProvider = Provider.of<GuardianProvider>(context, listen: false);
+      final guardianProvider = Provider.of<GuardianProvider>(
+        context,
+        listen: false,
+      );
       await guardianProvider.initialize();
 
       // Wait for animations to complete
@@ -144,9 +139,9 @@ class _SplashScreenState extends State<SplashScreen>
                 );
               },
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // App name
             FadeTransition(
               opacity: _fadeAnimation,
@@ -158,9 +153,9 @@ class _SplashScreenState extends State<SplashScreen>
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 8),
-            
+
             // App tagline
             FadeTransition(
               opacity: _fadeAnimation,
@@ -172,9 +167,9 @@ class _SplashScreenState extends State<SplashScreen>
                 textAlign: TextAlign.center,
               ),
             ),
-            
+
             const SizedBox(height: 48),
-            
+
             // Loading indicator
             FadeTransition(
               opacity: _fadeAnimation,
@@ -182,9 +177,9 @@ class _SplashScreenState extends State<SplashScreen>
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Loading text
             FadeTransition(
               opacity: _fadeAnimation,

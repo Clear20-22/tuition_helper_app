@@ -6,7 +6,7 @@ import '../core/themes/dark_theme.dart';
 
 class ThemeProvider extends ChangeNotifier {
   final StorageService _storageService = StorageService();
-  
+
   static const String _themeKey = 'app_theme_mode';
   static const String _primaryColorKey = 'primary_color';
   static const String _fontSizeKey = 'font_size_scale';
@@ -19,10 +19,11 @@ class ThemeProvider extends ChangeNotifier {
   ThemeMode get themeMode => _themeMode;
   Color get primaryColor => _primaryColor;
   double get fontSizeScale => _fontSizeScale;
-  
+
   bool get isDarkMode {
     if (_themeMode == ThemeMode.system) {
-      return WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
+      return WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+          Brightness.dark;
     }
     return _themeMode == ThemeMode.dark;
   }
@@ -106,7 +107,9 @@ class ThemeProvider extends ChangeNotifier {
   // Load theme mode from storage
   Future<void> _loadThemeMode() async {
     try {
-      final themeModeString = await _storageService.getSetting<String>(_themeKey);
+      final themeModeString = await _storageService.getSetting<String>(
+        _themeKey,
+      );
       if (themeModeString != null) {
         _themeMode = ThemeMode.values.firstWhere(
           (mode) => mode.toString() == themeModeString,
@@ -121,7 +124,9 @@ class ThemeProvider extends ChangeNotifier {
   // Load primary color from storage
   Future<void> _loadPrimaryColor() async {
     try {
-      final colorValue = await _storageService.getSetting<int>(_primaryColorKey);
+      final colorValue = await _storageService.getSetting<int>(
+        _primaryColorKey,
+      );
       if (colorValue != null) {
         _primaryColor = Color(colorValue);
       }
@@ -133,7 +138,9 @@ class ThemeProvider extends ChangeNotifier {
   // Load font size scale from storage
   Future<void> _loadFontSizeScale() async {
     try {
-      final fontSizeScale = await _storageService.getSetting<double>(_fontSizeKey);
+      final fontSizeScale = await _storageService.getSetting<double>(
+        _fontSizeKey,
+      );
       if (fontSizeScale != null) {
         _fontSizeScale = fontSizeScale;
       }
@@ -154,8 +161,8 @@ class ThemeProvider extends ChangeNotifier {
 
   // Toggle between light and dark mode
   Future<void> toggleTheme() async {
-    final newMode = _themeMode == ThemeMode.light 
-        ? ThemeMode.dark 
+    final newMode = _themeMode == ThemeMode.light
+        ? ThemeMode.dark
         : ThemeMode.light;
     await setThemeMode(newMode);
   }
@@ -203,7 +210,7 @@ class ThemeProvider extends ChangeNotifier {
   // Update system UI overlay style based on current theme
   void _updateSystemUIOverlay() {
     final statusBarBrightness = isDarkMode ? Brightness.light : Brightness.dark;
-    
+
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -293,8 +300,7 @@ class ThemeProvider extends ChangeNotifier {
 
   // Check if using custom theme
   bool get isCustomTheme {
-    return _primaryColor != const Color(0xFF2E7D5F) || 
-           _fontSizeScale != 1.0;
+    return _primaryColor != const Color(0xFF2E7D5F) || _fontSizeScale != 1.0;
   }
 
   // Get theme brightness

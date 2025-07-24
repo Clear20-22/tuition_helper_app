@@ -34,11 +34,11 @@ class GuardianProvider extends ChangeNotifier {
 
       // Load from storage service (Hive)
       _guardians = _storageService.getAllGuardians();
-      
+
       // If no data in Hive, try loading from SQLite
       if (_guardians.isEmpty) {
         _guardians = await _databaseService.getAllGuardians();
-        
+
         // Save to Hive for faster access
         for (final guardian in _guardians) {
           await _storageService.saveGuardian(guardian);
@@ -72,17 +72,23 @@ class GuardianProvider extends ChangeNotifier {
         throw Exception('Please enter a valid name');
       }
 
-      if (email != null && email.isNotEmpty && !ValidationUtils.isValidEmail(email)) {
+      if (email != null &&
+          email.isNotEmpty &&
+          !ValidationUtils.isValidEmail(email)) {
         throw Exception('Please enter a valid email address');
       }
 
-      if (phone != null && phone.isNotEmpty && !ValidationUtils.isValidPhone(phone)) {
+      if (phone != null &&
+          phone.isNotEmpty &&
+          !ValidationUtils.isValidPhone(phone)) {
         throw Exception('Please enter a valid phone number');
       }
 
       // Check if guardian with same email already exists
       if (email != null && email.isNotEmpty) {
-        final existingGuardian = _guardians.where((g) => g.email?.toLowerCase() == email.toLowerCase()).firstOrNull;
+        final existingGuardian = _guardians
+            .where((g) => g.email?.toLowerCase() == email.toLowerCase())
+            .firstOrNull;
         if (existingGuardian != null) {
           throw Exception('Guardian with this email already exists');
         }
@@ -137,11 +143,15 @@ class GuardianProvider extends ChangeNotifier {
         throw Exception('Please enter a valid name');
       }
 
-      if (email != null && email.isNotEmpty && !ValidationUtils.isValidEmail(email)) {
+      if (email != null &&
+          email.isNotEmpty &&
+          !ValidationUtils.isValidEmail(email)) {
         throw Exception('Please enter a valid email address');
       }
 
-      if (phone != null && phone.isNotEmpty && !ValidationUtils.isValidPhone(phone)) {
+      if (phone != null &&
+          phone.isNotEmpty &&
+          !ValidationUtils.isValidPhone(phone)) {
         throw Exception('Please enter a valid phone number');
       }
 
@@ -153,7 +163,12 @@ class GuardianProvider extends ChangeNotifier {
 
       // Check if email is being changed to one that already exists
       if (email != null && email.isNotEmpty) {
-        final existingGuardian = _guardians.where((g) => g.id != id && g.email?.toLowerCase() == email.toLowerCase()).firstOrNull;
+        final existingGuardian = _guardians
+            .where(
+              (g) =>
+                  g.id != id && g.email?.toLowerCase() == email.toLowerCase(),
+            )
+            .firstOrNull;
         if (existingGuardian != null) {
           throw Exception('Guardian with this email already exists');
         }
@@ -176,7 +191,7 @@ class GuardianProvider extends ChangeNotifier {
 
       // Update local list
       _guardians[existingIndex] = updatedGuardian;
-      
+
       // Update selected guardian if it's the one being updated
       if (_selectedGuardian?.id == id) {
         _selectedGuardian = updatedGuardian;
@@ -222,7 +237,9 @@ class GuardianProvider extends ChangeNotifier {
 
   // Select guardian
   void selectGuardian(String id) {
-    _selectedGuardian = _guardians.where((guardian) => guardian.id == id).firstOrNull;
+    _selectedGuardian = _guardians
+        .where((guardian) => guardian.id == id)
+        .firstOrNull;
     notifyListeners();
   }
 
@@ -239,10 +256,10 @@ class GuardianProvider extends ChangeNotifier {
     final lowerQuery = query.toLowerCase();
     return _guardians.where((guardian) {
       return guardian.name.toLowerCase().contains(lowerQuery) ||
-             (guardian.email?.toLowerCase().contains(lowerQuery) ?? false) ||
-             (guardian.phone?.contains(query) ?? false) ||
-             (guardian.address?.toLowerCase().contains(lowerQuery) ?? false) ||
-             (guardian.profession?.toLowerCase().contains(lowerQuery) ?? false);
+          (guardian.email?.toLowerCase().contains(lowerQuery) ?? false) ||
+          (guardian.phone?.contains(query) ?? false) ||
+          (guardian.address?.toLowerCase().contains(lowerQuery) ?? false) ||
+          (guardian.profession?.toLowerCase().contains(lowerQuery) ?? false);
     }).toList();
   }
 
@@ -253,8 +270,12 @@ class GuardianProvider extends ChangeNotifier {
 
   // Get guardians by profession
   List<GuardianModel> getGuardiansByProfession(String profession) {
-    return _guardians.where((guardian) => 
-        guardian.profession?.toLowerCase() == profession.toLowerCase()).toList();
+    return _guardians
+        .where(
+          (guardian) =>
+              guardian.profession?.toLowerCase() == profession.toLowerCase(),
+        )
+        .toList();
   }
 
   // Get guardians count
@@ -262,8 +283,9 @@ class GuardianProvider extends ChangeNotifier {
 
   // Check if guardian exists by email
   bool guardianExistsByEmail(String email) {
-    return _guardians.any((guardian) => 
-        guardian.email?.toLowerCase() == email.toLowerCase());
+    return _guardians.any(
+      (guardian) => guardian.email?.toLowerCase() == email.toLowerCase(),
+    );
   }
 
   // Check if guardian exists by phone
@@ -273,10 +295,18 @@ class GuardianProvider extends ChangeNotifier {
 
   // Get guardian statistics
   Map<String, dynamic> getGuardianStatistics() {
-    final withEmail = _guardians.where((g) => g.email?.isNotEmpty == true).length;
-    final withPhone = _guardians.where((g) => g.phone?.isNotEmpty == true).length;
-    final withAddress = _guardians.where((g) => g.address?.isNotEmpty == true).length;
-    final withProfession = _guardians.where((g) => g.profession?.isNotEmpty == true).length;
+    final withEmail = _guardians
+        .where((g) => g.email?.isNotEmpty == true)
+        .length;
+    final withPhone = _guardians
+        .where((g) => g.phone?.isNotEmpty == true)
+        .length;
+    final withAddress = _guardians
+        .where((g) => g.address?.isNotEmpty == true)
+        .length;
+    final withProfession = _guardians
+        .where((g) => g.profession?.isNotEmpty == true)
+        .length;
 
     return {
       'total': _guardians.length,

@@ -6,10 +6,7 @@ import '../../routes/app_routes.dart';
 class GuardianDetailScreen extends StatelessWidget {
   final String guardianId;
 
-  const GuardianDetailScreen({
-    super.key,
-    required this.guardianId,
-  });
+  const GuardianDetailScreen({super.key, required this.guardianId});
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +55,9 @@ class GuardianDetailScreen extends StatelessWidget {
       body: Consumer<GuardianProvider>(
         builder: (context, provider, child) {
           final guardian = provider.getGuardianById(guardianId);
-          
+
           if (guardian == null) {
-            return const Center(
-              child: Text('Guardian not found'),
-            );
+            return const Center(child: Text('Guardian not found'));
           }
 
           return SingleChildScrollView(
@@ -80,7 +75,9 @@ class GuardianDetailScreen extends StatelessWidget {
                           radius: 40,
                           backgroundColor: Theme.of(context).primaryColor,
                           child: Text(
-                            guardian.name.isNotEmpty ? guardian.name[0].toUpperCase() : 'G',
+                            guardian.name.isNotEmpty
+                                ? guardian.name[0].toUpperCase()
+                                : 'G',
                             style: const TextStyle(
                               fontSize: 32,
                               color: Colors.white,
@@ -94,13 +91,13 @@ class GuardianDetailScreen extends StatelessWidget {
                           style: Theme.of(context).textTheme.headlineSmall,
                           textAlign: TextAlign.center,
                         ),
-                        if (guardian.profession != null && guardian.profession!.isNotEmpty) ...[
+                        if (guardian.profession != null &&
+                            guardian.profession!.isNotEmpty) ...[
                           const SizedBox(height: 4),
                           Text(
                             guardian.profession!,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey[600],
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(color: Colors.grey[600]),
                             textAlign: TextAlign.center,
                           ),
                         ],
@@ -108,9 +105,9 @@ class GuardianDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Contact Information
                 Card(
                   child: Padding(
@@ -123,8 +120,9 @@ class GuardianDetailScreen extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(height: 16),
-                        
-                        if (guardian.email != null && guardian.email!.isNotEmpty) ...[
+
+                        if (guardian.email != null &&
+                            guardian.email!.isNotEmpty) ...[
                           _DetailRow(
                             icon: Icons.email,
                             label: 'Email',
@@ -132,8 +130,9 @@ class GuardianDetailScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                         ],
-                        
-                        if (guardian.phone != null && guardian.phone!.isNotEmpty) ...[
+
+                        if (guardian.phone != null &&
+                            guardian.phone!.isNotEmpty) ...[
                           _DetailRow(
                             icon: Icons.phone,
                             label: 'Phone',
@@ -141,8 +140,9 @@ class GuardianDetailScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                         ],
-                        
-                        if (guardian.emergencyContact != null && guardian.emergencyContact!.isNotEmpty) ...[
+
+                        if (guardian.emergencyContact != null &&
+                            guardian.emergencyContact!.isNotEmpty) ...[
                           _DetailRow(
                             icon: Icons.emergency,
                             label: 'Emergency Contact',
@@ -150,8 +150,9 @@ class GuardianDetailScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                         ],
-                        
-                        if (guardian.address != null && guardian.address!.isNotEmpty) ...[
+
+                        if (guardian.address != null &&
+                            guardian.address!.isNotEmpty) ...[
                           _DetailRow(
                             icon: Icons.location_on,
                             label: 'Address',
@@ -162,7 +163,7 @@ class GuardianDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 if (guardian.notes != null && guardian.notes!.isNotEmpty) ...[
                   const SizedBox(height: 16),
                   Card(
@@ -185,9 +186,9 @@ class GuardianDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ],
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Metadata
                 Card(
                   child: Padding(
@@ -228,7 +229,9 @@ class GuardianDetailScreen extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Guardian'),
-        content: const Text('Are you sure you want to delete this guardian? This action cannot be undone.'),
+        content: const Text(
+          'Are you sure you want to delete this guardian? This action cannot be undone.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -237,12 +240,17 @@ class GuardianDetailScreen extends StatelessWidget {
           TextButton(
             onPressed: () async {
               Navigator.pop(context); // Close dialog
-              final provider = Provider.of<GuardianProvider>(context, listen: false);
+              final provider = Provider.of<GuardianProvider>(
+                context,
+                listen: false,
+              );
               await provider.deleteGuardian(guardianId);
               if (context.mounted) {
                 Navigator.pop(context); // Go back to previous screen
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Guardian deleted successfully')),
+                  const SnackBar(
+                    content: Text('Guardian deleted successfully'),
+                  ),
                 );
               }
             },
@@ -274,11 +282,7 @@ class _DetailRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          icon,
-          size: 20,
-          color: Colors.grey[600],
-        ),
+        Icon(icon, size: 20, color: Colors.grey[600]),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -286,15 +290,12 @@ class _DetailRow extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.grey[600],
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
               ),
               const SizedBox(height: 2),
-              Text(
-                value,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              Text(value, style: Theme.of(context).textTheme.bodyMedium),
             ],
           ),
         ),

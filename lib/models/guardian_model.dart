@@ -173,18 +173,18 @@ class GuardianModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        email,
-        phone,
-        address,
-        profession,
-        emergencyContact,
-        notes,
-        createdAt,
-        updatedAt,
-        isSynced,
-      ];
+    id,
+    name,
+    email,
+    phone,
+    address,
+    profession,
+    emergencyContact,
+    notes,
+    createdAt,
+    updatedAt,
+    isSynced,
+  ];
 
   @override
   String toString() {

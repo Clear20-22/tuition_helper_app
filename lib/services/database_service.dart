@@ -26,7 +26,7 @@ class DatabaseService {
   Future<Database> _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, 'tuition_helper.db');
-    
+
     return await openDatabase(
       path,
       version: 1,
@@ -148,14 +148,28 @@ class DatabaseService {
     ''');
 
     // Create indexes for better performance
-    await db.execute('CREATE INDEX idx_students_guardian_id ON students(guardian_id)');
-    await db.execute('CREATE INDEX idx_sessions_student_id ON sessions(student_id)');
+    await db.execute(
+      'CREATE INDEX idx_students_guardian_id ON students(guardian_id)',
+    );
+    await db.execute(
+      'CREATE INDEX idx_sessions_student_id ON sessions(student_id)',
+    );
     await db.execute('CREATE INDEX idx_sessions_date ON sessions(date)');
-    await db.execute('CREATE INDEX idx_payments_guardian_id ON payments(guardian_id)');
-    await db.execute('CREATE INDEX idx_payments_student_id ON payments(student_id)');
-    await db.execute('CREATE INDEX idx_payments_due_date ON payments(due_date)');
-    await db.execute('CREATE INDEX idx_notifications_scheduled_date ON notifications(scheduled_date)');
-    await db.execute('CREATE INDEX idx_notifications_is_read ON notifications(is_read)');
+    await db.execute(
+      'CREATE INDEX idx_payments_guardian_id ON payments(guardian_id)',
+    );
+    await db.execute(
+      'CREATE INDEX idx_payments_student_id ON payments(student_id)',
+    );
+    await db.execute(
+      'CREATE INDEX idx_payments_due_date ON payments(due_date)',
+    );
+    await db.execute(
+      'CREATE INDEX idx_notifications_scheduled_date ON notifications(scheduled_date)',
+    );
+    await db.execute(
+      'CREATE INDEX idx_notifications_is_read ON notifications(is_read)',
+    );
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
@@ -202,11 +216,7 @@ class DatabaseService {
 
   Future<int> deleteGuardian(String id) async {
     final db = await database;
-    return await db.delete(
-      'guardians',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('guardians', where: 'id = ?', whereArgs: [id]);
   }
 
   // Student operations
@@ -256,11 +266,7 @@ class DatabaseService {
 
   Future<int> deleteStudent(String id) async {
     final db = await database;
-    return await db.delete(
-      'students',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('students', where: 'id = ?', whereArgs: [id]);
   }
 
   // Session operations
@@ -285,7 +291,10 @@ class DatabaseService {
     return List.generate(maps.length, (i) => SessionModel.fromMap(maps[i]));
   }
 
-  Future<List<SessionModel>> getSessionsByDateRange(DateTime start, DateTime end) async {
+  Future<List<SessionModel>> getSessionsByDateRange(
+    DateTime start,
+    DateTime end,
+  ) async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       'sessions',
@@ -308,11 +317,7 @@ class DatabaseService {
 
   Future<int> deleteSession(String id) async {
     final db = await database;
-    return await db.delete(
-      'sessions',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('sessions', where: 'id = ?', whereArgs: [id]);
   }
 
   // Payment operations
@@ -360,11 +365,7 @@ class DatabaseService {
 
   Future<int> deletePayment(String id) async {
     final db = await database;
-    return await db.delete(
-      'payments',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('payments', where: 'id = ?', whereArgs: [id]);
   }
 
   // Notification operations
@@ -379,7 +380,10 @@ class DatabaseService {
       'notifications',
       orderBy: 'scheduled_date DESC',
     );
-    return List.generate(maps.length, (i) => NotificationModel.fromMap(maps[i]));
+    return List.generate(
+      maps.length,
+      (i) => NotificationModel.fromMap(maps[i]),
+    );
   }
 
   Future<List<NotificationModel>> getUnreadNotifications() async {
@@ -390,7 +394,10 @@ class DatabaseService {
       whereArgs: [0],
       orderBy: 'scheduled_date DESC',
     );
-    return List.generate(maps.length, (i) => NotificationModel.fromMap(maps[i]));
+    return List.generate(
+      maps.length,
+      (i) => NotificationModel.fromMap(maps[i]),
+    );
   }
 
   Future<int> updateNotification(NotificationModel notification) async {
@@ -405,11 +412,7 @@ class DatabaseService {
 
   Future<int> deleteNotification(String id) async {
     final db = await database;
-    return await db.delete(
-      'notifications',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('notifications', where: 'id = ?', whereArgs: [id]);
   }
 
   // Location operations
@@ -446,21 +449,13 @@ class DatabaseService {
 
   Future<int> deleteLocation(String id) async {
     final db = await database;
-    return await db.delete(
-      'locations',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('locations', where: 'id = ?', whereArgs: [id]);
   }
 
   // Sync operations
   Future<List<Map<String, dynamic>>> getUnsyncedData(String tableName) async {
     final db = await database;
-    return await db.query(
-      tableName,
-      where: 'is_synced = ?',
-      whereArgs: [0],
-    );
+    return await db.query(tableName, where: 'is_synced = ?', whereArgs: [0]);
   }
 
   Future<int> markAsSynced(String tableName, String id) async {

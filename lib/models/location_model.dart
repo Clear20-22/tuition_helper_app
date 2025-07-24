@@ -173,18 +173,18 @@ class LocationModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        address,
-        latitude,
-        longitude,
-        description,
-        contactNumber,
-        isActive,
-        createdAt,
-        updatedAt,
-        isSynced,
-      ];
+    id,
+    name,
+    address,
+    latitude,
+    longitude,
+    description,
+    contactNumber,
+    isActive,
+    createdAt,
+    updatedAt,
+    isSynced,
+  ];
 
   @override
   String toString() {
